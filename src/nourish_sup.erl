@@ -8,12 +8,13 @@ start_link() -> supervisor:start_link({local, ?MODULE}, ?MODULE, []).
 init([]) ->
     Dispatch = cowboy_router:compile([
         {'_', [
-            {"/", nourish_page, []},
+            {"/", nourish_page, ["index.html"]},
             {"/api/events", nourish_events, []},
             {"/api/impact", nourish_http, [impact]},
             {"/api/offers", nourish_http, [offers]},
             {"/api/offers/:id/:action", nourish_http, [offer_action]},
-            {"/assets/app.js", nourish_page, [js]}
+            {"/assets/app.js", nourish_page, ["app.js"]},
+            {"/assets/app.css", nourish_page, ["app.css"]}
         ]}
     ]),
     Port = application:get_env(nourish, port, 8080),

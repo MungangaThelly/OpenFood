@@ -1,6 +1,6 @@
 # Nourish Network
 
-A neighborhood food rescue pilot: local shops publish surplus, charities and volunteers claim pickups, and the community can see what was rescued.
+A neighborhood food rescue pilot: local shops publish surplus, charities and volunteers coordinate pickups, and each handoff has a reviewable activity history.
 
 ## Start locally
 
@@ -19,4 +19,4 @@ Open [http://localhost:8080](http://localhost:8080). The demo stores offers in m
 - [OTP architecture](docs/ARCHITECTURE.md)
 - [API quick reference](docs/API.md)
 
-This is a starter for a single-neighborhood pilot, not a production food safety or logistics system. Before real use, add durable storage, authentication and organization roles, privacy controls, monitoring, and locally appropriate food safety workflows.
+The demo captures donor-provided date marking, traceability reference, handling instructions, a donor safety declaration, recipient checks, and issue resolution. Actor names are self-reported and records are in memory, so it is not a production food safety or audit system. Before real use, add durable tamper-resistant storage, authentication and organization roles, privacy controls, monitoring, and workflows reviewed with local food businesses and municipal food control.

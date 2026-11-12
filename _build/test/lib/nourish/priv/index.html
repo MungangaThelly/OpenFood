@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f6f1">
+  <title>Nourish Network | Food rescue handoffs</title>
+  <link rel="stylesheet" href="/assets/app.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Nourish Network home">nourish<span>.</span></a>
+    <div class="top-meta"><span class="live-dot"></span> Local pilot workspace <span class="demo-badge">DEMO DATA</span></div>
+  </header>
+  <main class="shell">
+    <section class="intro">
+      <div><div class="eyebrow">Food rescue · handoff log</div><h1>Good food, accounted for.</h1>
+        <p>Coordinate a safe pickup from donor to recipient, and keep a record of each handoff.</p></div>
+      <button class="button primary" id="newOffer">＋ Log surplus food</button>
+    </section>
+    <section class="notice"><strong>Demo workspace</strong><span>Names and confirmations are self-reported here. This demo does not verify food safety or user identities.</span></section>
+    <section class="metrics" aria-label="Pilot impact">
+      <article class="metric"><span>Completed handoffs</span><strong id="pickupCount">0</strong><small>Recorded as collected</small></article>
+      <article class="metric"><span>Food rescued</span><strong id="quantityTotal">0</strong><small>Kept separate by unit</small></article>
+      <article class="metric"><span>Offers needing action</span><strong id="openCount">0</strong><small>Available, claimed, or exception</small></article>
+    </section>
+    <section class="board-head"><div><div class="eyebrow">Neighborhood board</div><h2>Offers and handoffs</h2></div><div class="filters" role="group" aria-label="Filter offers">
+      <button class="filter active" data-filter="open">Needs action</button><button class="filter" data-filter="all">All records</button><button class="filter" data-filter="completed">History</button>
+    </div></section>
+    <div id="offers" class="offer-grid" aria-live="polite"><div class="empty">Loading offers…</div></div>
+    <footer>Food details are supplied by the donor. Recipients must check the food at handoff and follow their own food-safety procedures.</footer>
+  </main>
+
+  <dialog id="offerDialog" class="dialog"><form id="offerForm" method="dialog">
+    <div class="dialog-head"><div><div class="eyebrow">Donor declaration</div><h2>Log surplus food</h2></div><button class="icon-button" type="button" data-close="offerDialog" aria-label="Close">×</button></div>
+    <div class="form-grid">
+      <label>Donor business<input name="business" required placeholder="e.g. Northside Market"></label>
+      <label>Staff posting the offer<input name="posted_by" required placeholder="Donor representative"></label>
+      <label class="span-2">Food and quantity<input name="title" required placeholder="e.g. Chilled vegetable soup"><span class="inline-input"><input name="quantity" type="number" min="0.01" step="any" required placeholder="Quantity"><input name="unit" required placeholder="Unit, e.g. portions"></span></label>
+      <label>Offer type<select name="kind"><option value="donation">Donation</option><option value="discount">Discounted sale</option></select></label>
+      <label>Price (SEK, if discounted)<input name="price" type="number" min="0" step="0.01" value="0"></label>
+      <label>Pickup deadline<input name="pickup_by" type="datetime-local" required></label>
+      <label>Pickup address<input name="address" required placeholder="Street and city"></label>
+      <label>Date marking<select name="date_type"><option value="best_before">Best before</option><option value="use_by">Use by</option><option value="not_applicable">No date marking applies</option></select></label>
+      <label>Date on food<input name="date_value" type="date"></label>
+      <label>Storage temperature / condition<input name="storage_temperature" required placeholder="e.g. Keep chilled at 0–4 °C"></label>
+      <label>Donor contact for pickup<input name="donor_contact" required placeholder="Name and phone or counter"></label>
+      <label class="span-2">Collection / batch reference<input name="batch_reference" required placeholder="Donor's traceability reference"></label>
+      <label class="span-2">Ingredients and allergen information<textarea name="ingredients" rows="2" placeholder="Enter label details, known allergens, or say not provided"></textarea></label>
+      <label class="span-2">Handling instructions<textarea name="handling" rows="2" required placeholder="Transport, storage, or serving instructions"></textarea></label>
+      <label class="span-2">Additional notes<textarea name="notes" rows="2" placeholder="Packaging, condition, context"></textarea></label>
+      <label class="check span-2"><input name="donor_safety_confirmed" type="checkbox" required><span>I am the donor representative and confirm this offer is being provided as food intended for human consumption. This is a donor declaration, not a platform safety certification.</span></label>
+    </div>
+    <div class="dialog-actions"><button class="button quiet" type="button" data-close="offerDialog">Cancel</button><button class="button primary" type="submit">Publish offer</button></div>
+  </form></dialog>
+
+  <dialog id="handoffDialog" class="dialog"><form id="handoffForm" method="dialog">
+    <div class="dialog-head"><div><div class="eyebrow">Recipient confirmation</div><h2>Record pickup</h2></div><button class="icon-button" type="button" data-close="handoffDialog" aria-label="Close">×</button></div>
+    <input name="offer_id" type="hidden">
+    <div class="form-grid">
+      <label>Received quantity<input name="quantity" type="number" min="0.01" step="any" required></label>
+      <label>Recipient confirming<input name="confirmed_by" required placeholder="Name / organization"></label>
+      <label>Temperature at handoff (°C)<input name="temperature_c" type="number" step="0.1" placeholder="If applicable"></label>
+      <label>Condition notes<input name="condition_notes" placeholder="Condition or exceptions"></label>
+      <label class="check span-2"><input name="package_intact" type="checkbox" required><span>Packaging and food condition checked at handoff</span></label>
+      <label class="check span-2"><input name="date_checked" type="checkbox" required><span>Date marking checked; food accepted under recipient procedures</span></label>
+    </div>
+    <div class="dialog-actions"><button class="button quiet" type="button" data-close="handoffDialog">Cancel</button><button class="button primary" type="submit">Confirm handoff</button></div>
+  </form></dialog>
+
+  <dialog id="auditDialog" class="dialog audit-dialog"><div class="dialog-head"><div><div class="eyebrow">Record history</div><h2>Handoff audit trail</h2></div><button class="icon-button" type="button" data-close="auditDialog" aria-label="Close">×</button></div><div id="auditEvents" class="timeline"></div></dialog>
+  <script src="/assets/app.js" defer></script>
+</body>
+</html>
